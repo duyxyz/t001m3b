@@ -30,7 +30,7 @@ const SIZES = [16, 32, 48, 64, 96, 128, 180, 192, 256];
 
 const useStyles = makeStyles({
   container: {
-    maxWidth: '680px',
+    maxWidth: '1200px',
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
