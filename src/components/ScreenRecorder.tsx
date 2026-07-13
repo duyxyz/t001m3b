@@ -613,10 +613,6 @@ export default function ScreenRecorder({
     <div className={styles.container}>
       <div className={styles.header}>
         <Title1 className={styles.title} as="h1">Screen Recorder</Title1>
-        <br />
-        <Subtitle1 className={styles.subtitle} as="p">
-          Quay màn hình và âm thanh trực tiếp trên trình duyệt của bạn với đầy đủ tính năng
-        </Subtitle1>
       </div>
 
       <div className={styles.recorderLayout}>

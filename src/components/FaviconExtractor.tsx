@@ -306,10 +306,6 @@ export default function FaviconExtractor({
     <div className={styles.container}>
       <div className={styles.header}>
         <Title1 className={styles.title} as="h1">Favicon Extractor</Title1>
-        <br />
-        <Subtitle1 className={styles.subtitle} as="p">
-          Dán link trang web bất kỳ để lấy các phiên bản Favicon của họ
-        </Subtitle1>
       </div>
 
       <div className={styles.card}>

@@ -16,10 +16,12 @@ import {
   VideoRegular,
   ColorRegular,
   LaptopRegular,
+  SettingsRegular,
 } from '@fluentui/react-icons';
 import FaviconExtractor from '@/components/FaviconExtractor';
 import ScreenRecorder from '@/components/ScreenRecorder';
 import ColorPicker from '@/components/ColorPicker';
+import DnsChanger from '@/components/DnsChanger';
 
 const useStyles = makeStyles({
   layoutContainer: {
@@ -110,7 +112,7 @@ interface Recording {
 
 export default function Home() {
   const styles = useStyles();
-  const [activeTab, setActiveTab] = React.useState<'favicon' | 'recorder' | 'color'>('favicon');
+  const [activeTab, setActiveTab] = React.useState<'favicon' | 'recorder' | 'color' | 'dns'>('favicon');
 
   // Shared Toaster Config
   const toasterId = useId('global-toaster');
@@ -170,6 +172,9 @@ export default function Home() {
             <Tab value="color" icon={<ColorRegular />}>
               Color Picker
             </Tab>
+            <Tab value="dns" icon={<SettingsRegular />}>
+              DNS Changer
+            </Tab>
           </TabList>
         </header>
 
@@ -189,6 +194,9 @@ export default function Home() {
           </div>
           <div style={{ display: activeTab === 'color' ? 'flex' : 'none', width: '100%', justifyContent: 'center' }}>
             <ColorPicker dispatchToast={dispatchToast} />
+          </div>
+          <div style={{ display: activeTab === 'dns' ? 'flex' : 'none', width: '100%', justifyContent: 'center' }}>
+            <DnsChanger dispatchToast={dispatchToast} />
           </div>
         </main>
       </div>

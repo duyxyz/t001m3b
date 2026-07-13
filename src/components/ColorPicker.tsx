@@ -522,10 +522,6 @@ export default function ColorPicker({
     <div className={styles.container}>
       <div className={styles.header}>
         <Title1 className={styles.title} as="h1">Color Picker</Title1>
-        <br />
-        <Subtitle1 className={styles.subtitle} as="p">
-          Lấy mã màu từ màn hình của bạn và chuyển đổi giữa các định dạng màu
-        </Subtitle1>
       </div>
 
       <div className={styles.twoColumnLayout}>
