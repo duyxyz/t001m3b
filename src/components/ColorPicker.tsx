@@ -92,7 +92,6 @@ const useStyles = makeStyles({
     height: '80px',
     borderRadius: tokens.borderRadiusLarge,
     ...shorthands.border('1px', 'solid', tokens.colorNeutralStroke2),
-    boxShadow: tokens.shadow8,
     flexShrink: 0,
   },
   pickerActions: {
@@ -486,13 +485,13 @@ export default function ColorPicker({
     }
   };
 
-  // Generate Harmonious Colors based on HSL
+  // Generate Harmonious Colors based on Monochromatic & Adjacent shades
   const harmonies = [
-    { label: 'Bổ túc (Complementary)', hex: hslToHex((hsl.h + 180) % 360, hsl.s, hsl.l) },
-    { label: 'Tương đồng L (Analogous L)', hex: hslToHex((hsl.h + 30) % 360, hsl.s, hsl.l) },
-    { label: 'Tương đồng R (Analogous R)', hex: hslToHex((hsl.h - 30 + 360) % 360, hsl.s, hsl.l) },
-    { label: 'Tam giác cân L (Triadic L)', hex: hslToHex((hsl.h + 120) % 360, hsl.s, hsl.l) },
-    { label: 'Tam giác cân R (Triadic R)', hex: hslToHex((hsl.h - 120 + 360) % 360, hsl.s, hsl.l) },
+    { label: 'Sáng hơn (Lighter)', hex: hslToHex(hsl.h, hsl.s, Math.min(hsl.l + 15, 95)) },
+    { label: 'Tối hơn (Darker)', hex: hslToHex(hsl.h, hsl.s, Math.max(hsl.l - 15, 5)) },
+    { label: 'Nhạt màu (Muted)', hex: hslToHex(hsl.h, Math.max(hsl.s - 25, 10), hsl.l) },
+    { label: 'Tông lạnh hơn (Cooler)', hex: hslToHex((hsl.h + 15) % 360, hsl.s, hsl.l) },
+    { label: 'Tông ấm hơn (Warmer)', hex: hslToHex((hsl.h - 15 + 360) % 360, hsl.s, hsl.l) },
   ];
 
   return (
@@ -565,10 +564,6 @@ export default function ColorPicker({
                     </Button>
                   </div>
                 </div>
-
-                <Caption1 style={{ color: tokens.colorNeutralForeground4 }}>
-                  * Eye Dropper hỗ trợ đầy đủ trên Chrome, Edge, Opera. Bấm chọn màu bất cứ đâu trên màn hình.
-                </Caption1>
               </div>
             </div>
           </div>
@@ -637,12 +632,12 @@ export default function ColorPicker({
                 )}
               </div>
               {imageUrl && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '4px', flexWrap: 'wrap', gap: '12px' }}>
-                  <Caption1 style={{ color: tokens.colorNeutralForeground4 }}>
-                    {enableZoom
-                      ? '* Click lấy màu. Kéo chuột để di chuyển ảnh (khi phóng to).'
-                      : '* Click trực tiếp lên bất kỳ điểm nào trên ảnh để lấy mã màu.'}
-                  </Caption1>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '4px', flexWrap: 'wrap', gap: '12px' }}>
+                  {enableZoom && (
+                    <Caption1 style={{ color: tokens.colorNeutralForeground4, marginRight: 'auto' }}>
+                      * Kéo chuột để di chuyển ảnh
+                    </Caption1>
+                  )}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <Caption1 style={{ fontWeight: '600', color: enableZoom ? tokens.colorNeutralForeground1 : tokens.colorNeutralForeground4 }}>
                       Zoom: {transform.zoom}x
