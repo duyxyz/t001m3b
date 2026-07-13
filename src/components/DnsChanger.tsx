@@ -172,22 +172,6 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     gap: '4px',
   },
-  fallbackCard: {
-    backgroundColor: tokens.colorPaletteYellowBackground1,
-    ...shorthands.border('1px', 'solid', tokens.colorPaletteYellowBorder),
-    borderRadius: tokens.borderRadiusLarge,
-    ...shorthands.padding('16px'),
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-  },
-  fallbackTitle: {
-    fontWeight: '600',
-    color: tokens.colorPaletteYellowForeground,
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-  },
   fallbackActions: {
     display: 'flex',
     gap: '12px',
