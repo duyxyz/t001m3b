@@ -43,8 +43,9 @@ const useStyles = makeStyles({
     gap: '12px',
   },
   topBarTitle: {
+    fontFamily: 'var(--font-dancing-script), cursive',
     fontWeight: 'bold',
-    fontSize: '20px',
+    fontSize: '24px',
     color: tokens.colorNeutralForeground1,
   },
   logo: {
@@ -107,7 +108,7 @@ export default function Home() {
         <div className={styles.topBarLeft}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/icon-192.png" alt="Logo" className={styles.logo} />
-          <span className={styles.topBarTitle}>T00M3B</span>
+          <span className={styles.topBarTitle}>t001m3b</span>
         </div>
         <TabList
           selectedValue={activeTab}
