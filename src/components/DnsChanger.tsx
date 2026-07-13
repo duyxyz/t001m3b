@@ -26,6 +26,7 @@ import {
   ArrowDownloadRegular,
   CopyRegular,
   ArrowClockwiseRegular,
+  LightbulbRegular,
 } from '@fluentui/react-icons';
 
 interface NetworkAdapter {
@@ -348,15 +349,17 @@ export default function DnsChanger({
   // Helper to generate the manual PowerShell command
   const getPowerShellCommand = () => {
     const targetIdentifier = isRemoteServer 
-      ? `-InterfaceAlias "${manualAdapterName}"` 
+      ? `-InterfaceAlias '${manualAdapterName}'` 
       : `-InterfaceIndex ${selectedAdapterIndex}`;
 
     if (!isRemoteServer && selectedAdapterIndex === null) return '';
     if (selectedPresetIndex === 'dhcp') {
       return `Set-DnsClientServerAddress ${targetIdentifier} -ResetServerAddresses`;
     }
-    const dnsStr = secondaryDns ? `"${primaryDns}","${secondaryDns}"` : `"${primaryDns}"`;
-    return `Set-DnsClientServerAddress ${targetIdentifier} -ServerAddresses (${dnsStr})`;
+    const dnsArray = secondaryDns 
+      ? `@('${primaryDns}', '${secondaryDns}')` 
+      : `@('${primaryDns}')`;
+    return `Set-DnsClientServerAddress ${targetIdentifier} -ServerAddresses ${dnsArray}`;
   };
 
   const copyCommand = () => {
@@ -376,7 +379,27 @@ export default function DnsChanger({
   const downloadBatFile = () => {
     const cmd = getPowerShellCommand();
     if (!cmd) return;
-    const fileContent = `@echo off\nchcp 65001 > nul\necho Đang thiết lập cấu hình DNS...\npowershell -Command "Start-Process powershell -ArgumentList '-NoProfile -Command ${cmd}' -Verb RunAs"\necho Đã gửi yêu cầu đổi DNS. Hãy bấm YES trên hộp thoại xác nhận quyền Admin của Windows.\npause\n`;
+    
+    // Self-elevating batch file format
+    const fileContent = `@echo off\n` +
+      `chcp 65001 > nul\n` +
+      `:: Check for administrator privileges\n` +
+      `net session >nul 2>&1\n` +
+      `if %errorLevel% == 0 (\n` +
+      `    goto :admin\n` +
+      `) else (\n` +
+      `    goto :elevate\n` +
+      `)\n\n` +
+      `:elevate\n` +
+      `echo Yeu cau cap quyen Administrator de cau hinh mang...\n` +
+      `powershell -Command "Start-Process '%~dpnx0' -Verb RunAs"\n` +
+      `exit /b\n\n` +
+      `:admin\n` +
+      `echo Dang thiet lap cau hinh DNS...\n` +
+      `powershell -NoProfile -Command "${cmd}"\n` +
+      `echo Thiet lap DNS hoan tat!\n` +
+      `pause\n`;
+
     const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -488,8 +511,11 @@ export default function DnsChanger({
             </div>
 
             {isRemoteServer ? (
-              <div style={{ padding: '8px 12px', border: `1px solid ${tokens.colorNeutralStroke2}`, borderRadius: tokens.borderRadiusMedium, backgroundColor: tokens.colorNeutralBackground1, fontSize: '12px', color: tokens.colorNeutralForeground3, lineHeight: '1.4' }}>
-                💡 <b>Mẹo chạy online:</b> Chọn Preset DNS mong muốn ở cột bên phải, sau đó tải file <b>.bat</b> hoặc copy lệnh <b>PowerShell</b> để chạy trực tiếp trên máy tính của bạn.
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', padding: '8px 12px', border: `1px solid ${tokens.colorNeutralStroke2}`, borderRadius: tokens.borderRadiusMedium, backgroundColor: tokens.colorNeutralBackground1, fontSize: '12px', color: tokens.colorNeutralForeground3, lineHeight: '1.4' }}>
+                <LightbulbRegular style={{ fontSize: '16px', flexShrink: 0, marginTop: '2px', color: tokens.colorNeutralForeground3 }} />
+                <div>
+                  <b>Mẹo chạy online:</b> Chọn Preset DNS mong muốn ở cột bên phải, sau đó tải file <b>.bat</b> hoặc copy lệnh <b>PowerShell</b> để chạy trực tiếp trên máy tính của bạn.
+                </div>
               </div>
             ) : (
               <Button
