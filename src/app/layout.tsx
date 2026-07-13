@@ -21,6 +21,9 @@ const dancingScript = Dancing_Script({
 export const metadata: Metadata = {
   title: "t001m3b",
   description: "Bộ công cụ tiện ích Web đa năng: Favicon Extractor và Screen Recorder.",
+  verification: {
+    google: "aAMxolM6hxGZ0juAyLod4FQsCTVSexu3pwmijtQ9izE",
+  },
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" }
