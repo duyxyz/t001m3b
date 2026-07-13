@@ -24,7 +24,6 @@ import {
   SearchRegular,
   CopyRegular,
   OpenRegular,
-  CheckmarkRegular,
 } from '@fluentui/react-icons';
 
 const SIZES = [16, 32, 48, 64, 96, 128, 180, 192, 256];
@@ -144,27 +143,10 @@ const useStyles = makeStyles({
     fontWeight: '500',
     color: tokens.colorNeutralForeground4,
   },
-  selectedUrlBox: {
+  formatRow: {
     display: 'flex',
     alignItems: 'center',
-    gap: '12px',
-    paddingLeft: '12px',
-    paddingRight: '6px',
-    height: '40px',
-    boxSizing: 'border-box',
-    backgroundColor: tokens.colorNeutralBackground2,
-    ...shorthands.border('1px', 'solid', tokens.colorNeutralStroke1),
-    borderRadius: tokens.borderRadiusMedium,
-  },
-  selectedUrlText: {
-    flexGrow: 1,
-    fontSize: '16px',
-    wordBreak: 'break-all',
-    fontFamily: 'monospace',
-    color: tokens.colorNeutralForeground2,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
+    gap: '10px',
   },
   actions: {
     display: 'flex',
@@ -193,7 +175,7 @@ export default function FaviconExtractor({
   const [variants, setVariants] = React.useState<FaviconVariant[]>([]);
   const [selectedUrl, setSelectedUrl] = React.useState('');
   const [failedUrls, setFailedUrls] = React.useState<Record<string, boolean>>({});
-  const [copied, setCopied] = React.useState(false);
+
 
   const normalizeUrl = (raw: string) => {
     let trimmed = raw.trim();
@@ -223,7 +205,7 @@ export default function FaviconExtractor({
     setVariants([]);
     setSelectedUrl('');
     setFailedUrls({});
-    setCopied(false);
+
 
     const parsed = normalizeUrl(urlInput);
     if (!parsed) {
@@ -291,16 +273,11 @@ export default function FaviconExtractor({
     }
   }, [variants, failedUrls, selectedUrl]);
 
-  // Reset copied state when selected URL changes
-  React.useEffect(() => {
-    setCopied(false);
-  }, [selectedUrl]);
+
 
   const copyToClipboard = () => {
     if (!selectedUrl) return;
     navigator.clipboard.writeText(selectedUrl).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
       dispatchToast(
         <Toast>
           <ToastTitle>Đã sao chép!</ToastTitle>
@@ -416,13 +393,16 @@ export default function FaviconExtractor({
                 {selectedUrl && (
                   <>
                     <Subtitle2 className={styles.sectionTitle} as="span">Đường dẫn đã chọn:</Subtitle2>
-                    <div className={styles.selectedUrlBox}>
-                      <span className={styles.selectedUrlText}>{selectedUrl}</span>
+                    <div className={styles.formatRow}>
+                      <Input
+                        readOnly
+                        value={selectedUrl}
+                        style={{ fontFamily: 'monospace', flexGrow: 1 }}
+                      />
                       <Button
-                        icon={copied ? <CheckmarkRegular style={{ color: tokens.colorBrandForeground1 }} /> : <CopyRegular />}
+                        icon={<CopyRegular />}
                         onClick={copyToClipboard}
-                        appearance="subtle"
-                        title={copied ? "Đã sao chép" : "Sao chép đường dẫn"}
+                        title="Sao chép đường dẫn"
                       />
                     </div>
                     <div className={styles.actions}>
